@@ -21,11 +21,11 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A) && _locationFlag)
+        if (Input.GetKeyDown(KeyCode.W) && _locationFlag)
         {
             MoveLeft();
         }
-        else if (Input.GetKey(KeyCode.D) && !_locationFlag)
+        else if (Input.GetKey(KeyCode.S) && !_locationFlag)
         {
             MoveRight();
         }
@@ -87,6 +87,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        light.intensity += 0.5f;
+        light.intensity += 0.2f;
     }
 }

@@ -504,7 +504,7 @@ GameObject:
   - component: {fileID: 178300181}
   - component: {fileID: 178300180}
   m_Layer: 5
-  m_Name: D
+  m_Name: S
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -560,7 +560,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: D - Right
+  m_Text: S - Right
 --- !u!222 &178300181
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2406,7 +2406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b6f40f4f86dda941b77b51a95c7882d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightLosePerSecond: 0.1
+  lightLosePerSecond: 0.15
   scrollSpeed: -1
   spawnRate: 3
   mainMenuCanvas: {fileID: 478190022}
@@ -3805,7 +3805,7 @@ GameObject:
   - component: {fileID: 1820645586}
   - component: {fileID: 1820645585}
   m_Layer: 5
-  m_Name: A
+  m_Name: W
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3861,7 +3861,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: A - Left
+  m_Text: W - Left
 --- !u!222 &1820645586
 CanvasRenderer:
   m_ObjectHideFlags: 0

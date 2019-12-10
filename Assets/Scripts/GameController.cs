@@ -17,9 +17,10 @@ public class GameController : MonoBehaviour
     private float _timeSinceLastSpeedLose;
     private PlayerController _playerController;
     private AudioSource _audioSource;
+    private bool _firstPointCollected = false;
 
-    
-    [SerializeField] private float lightLosePerSecond = 0.1f;
+
+    [SerializeField] private float lightLosePerSecond = 0.15f;
     [SerializeField] private float scrollSpeed = -1.5f;
     [SerializeField] private float spawnRate = 3.0f;
 
@@ -30,7 +31,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject gameOverMenuCanvas;
     [SerializeField] private Text scoreText;
     [SerializeField] private Text gameOverScoreText;
-    
+
     private void Start()
     {
         _playerController = FindObjectOfType<PlayerController>();
@@ -70,7 +71,7 @@ public class GameController : MonoBehaviour
         if (_gameState != GameState.Started) return;
         _timeSinceLastLightLose += Time.deltaTime;
         _timeSinceLastSpeedLose += Time.deltaTime;
-        if (_timeSinceLastLightLose >= 1)
+        if (_timeSinceLastLightLose >= 1 && _firstPointCollected)
         {
             _timeSinceLastLightLose = 0;
             _playerController.LoseLight(lightLosePerSecond);
@@ -91,6 +92,7 @@ public class GameController : MonoBehaviour
             return;
         }
 
+        _firstPointCollected = true;
         _score++;
         scoreText.text = $"Score: {_score.ToString()}";
 
@@ -172,6 +174,14 @@ public class GameController : MonoBehaviour
     {
         _gameState = GameState.Over;
         gameOverScoreText.text = $"Your Score {_score}";
+        gameOverMenuCanvas.SetActive(true);
+        gameCanvas.SetActive(false);
+    }
+
+    public void Win()
+    {
+        _gameState = GameState.Over;
+        gameOverScoreText.text = $"Never mind! You have won. Score {_score}";
         gameOverMenuCanvas.SetActive(true);
         gameCanvas.SetActive(false);
     }

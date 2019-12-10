@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CollectiblePool : MonoBehaviour
 {
@@ -45,13 +47,16 @@ public class CollectiblePool : MonoBehaviour
             // transform collectibles
             var leftRightDecider = Random.Range(-1, 1);
             var topBottomDecider = Random.Range(-1, 1);
-            
+
             var zPosition = leftRightDecider < 0 ? spawnZPositionLeft : spawnZPositionRight;
             var yPosition = topBottomDecider < 0 ? spawnYPositionBottom : spawnYPositionTop;
-            
-            collectibles[currentCollectible].transform.position =
-                new Vector3(i * spawnXPositionMultiplier + _lastSpawnPosition, yPosition, zPosition);
 
+            collectibles[currentCollectible].transform.position =
+                new Vector3(
+                    i * (spawnXPositionMultiplier + (0 - GameController.Instance.GetScrollSpeed()) * 0.2f) + _lastSpawnPosition,
+                    yPosition,
+                    zPosition
+                );
             currentCollectible++;
             if (currentCollectible >= collectiblePoolSize)
             {
@@ -59,8 +64,18 @@ public class CollectiblePool : MonoBehaviour
             }
         }
 
-        _lastSpawnPosition += 0.3f * collectibleCountInGroup;
-        /* TODO: need optimization here or it can be feature. reason is we are increasing _lastSpawnPosition infinitely
+        try
+        {
+            _lastSpawnPosition += 0.3f * collectibleCountInGroup;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            GameController.Instance.Win();
+        }
+
+        /* need optimization here or it can be feature. reason is we are increasing _lastSpawnPosition infinitely
+        // for now it is a feature
         if (_lastSpawnPosition >= maxXPosition)
         {
             _lastSpawnPosition = 0.0f;
