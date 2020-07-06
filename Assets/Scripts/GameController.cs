@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using UnityEngine.Networking;
+using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -31,10 +32,16 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject gameOverMenuCanvas;
     [SerializeField] private Text scoreText;
     [SerializeField] private Text gameOverScoreText;
-
+    
+    private Dictionary<string, object> _customEventParams = new Dictionary<string, object>();
+    
     private void Start()
     {
         _playerController = FindObjectOfType<PlayerController>();
+        
+        _customEventParams.Add("CorrelationId", new Guid());
+        
+        GamePlayed();
     }
 
     private void Awake()
@@ -121,6 +128,8 @@ public class GameController : MonoBehaviour
         _gameState = GameState.Started;
         mainMenuCanvas.SetActive(false);
         gameCanvas.SetActive(true);
+        
+        GameStarted();
     }
 
     private void Pause()
@@ -130,6 +139,7 @@ public class GameController : MonoBehaviour
         Time.timeScale = 0.0f;
         _previousGameState = _gameState;
         _gameState = GameState.Paused;
+        GamePaused();
     }
 
     public void Resume()
@@ -138,9 +148,10 @@ public class GameController : MonoBehaviour
         pauseMenuCanvas.SetActive(false);
         Time.timeScale = _gameSpeed;
         _gameState = _previousGameState;
+        
+        GameResumed();
     }
-
-
+    
     public void LoadGame()
     {
         PlayButtonMusic();
@@ -153,9 +164,10 @@ public class GameController : MonoBehaviour
 
         _score = playerData.Score;
         scoreText.text = $"Score: {_score.ToString()}";
+        
+        GameLoaded();
     }
-
-
+    
     public void SaveGame()
     {
         PlayButtonMusic();
@@ -168,14 +180,18 @@ public class GameController : MonoBehaviour
 
         bf.Serialize(file, playerData);
         file.Close();
+        
+        GameSaved();
     }
 
-    public void GameOver()
+    public void Lose()
     {
         _gameState = GameState.Over;
         gameOverScoreText.text = $"Your Score {_score}";
         gameOverMenuCanvas.SetActive(true);
         gameCanvas.SetActive(false);
+
+        GameOver();
     }
 
     public void Win()
@@ -184,13 +200,14 @@ public class GameController : MonoBehaviour
         gameOverScoreText.text = $"Never mind! You have won. Score {_score}";
         gameOverMenuCanvas.SetActive(true);
         gameCanvas.SetActive(false);
+        
+        GameFinished();
     }
 
     public void Submit()
     {
     }
-
-
+    
     public void HighScoreList()
     {
     }
@@ -205,11 +222,106 @@ public class GameController : MonoBehaviour
         PlayButtonMusic();
         Time.timeScale = _gameSpeed;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        
+        GameRestarted();
     }
 
     public void Quit()
     {
+        GameExited();
         PlayButtonMusic();
         Application.Quit();
+        _customEventParams.Clear();
     }
+    
+    private void GameStarted()
+    {
+        _customEventParams.Clear();
+        _customEventParams.Add("level", 1);
+        _customEventParams.Add("player", "mevlana");
+
+        AnalyticsEvent.LevelStart("game_started", _customEventParams);
+    }
+
+    private void GamePaused()
+    {
+        _customEventParams.Clear();
+        _customEventParams.Add("level", 1);
+        _customEventParams.Add("player", "mevlana");
+
+        AnalyticsEvent.LevelComplete("game_paused", _customEventParams);
+    }
+    
+    private void GameResumed()
+    {
+        _customEventParams.Clear();
+        _customEventParams.Add("level", 1);
+        _customEventParams.Add("player", "mevlana");
+
+        AnalyticsEvent.LevelComplete("game_paused", _customEventParams);
+    }
+    
+    private void GameOver()
+    {
+        _customEventParams.Clear();
+        _customEventParams.Add("level", 1);
+        _customEventParams.Add("player", "mevlana");
+
+        AnalyticsEvent.LevelComplete("game_over", _customEventParams);
+    }
+    
+    private void GameFinished()
+    {
+        _customEventParams.Clear();
+        _customEventParams.Add("level", 1);
+        _customEventParams.Add("player", "mevlana");
+
+        AnalyticsEvent.LevelComplete("game_finished", _customEventParams);
+    }
+    
+    private void GameSaved()
+    {
+        _customEventParams.Clear();
+        _customEventParams.Add("level", 1);
+        _customEventParams.Add("player", "mevlana");
+
+        AnalyticsEvent.LevelComplete("game_saved", _customEventParams);
+    }
+    
+    private void GameLoaded()
+    {
+        _customEventParams.Clear();
+        _customEventParams.Add("level", 1);
+        _customEventParams.Add("player", "mevlana");
+
+        AnalyticsEvent.LevelComplete("game_loaded", _customEventParams);
+    }
+    
+    private void GameExited()
+    {
+        _customEventParams.Clear();
+        _customEventParams.Add("level", 1);
+        _customEventParams.Add("player", "mevlana");
+
+        AnalyticsEvent.LevelComplete("game_exited", _customEventParams);
+    }
+    
+    private void GamePlayed()
+    {
+        _customEventParams.Clear();
+        _customEventParams.Add("level", 1);
+        _customEventParams.Add("player", "mevlana");
+
+        AnalyticsEvent.LevelComplete("game_played", _customEventParams);
+    }
+    
+    private void GameRestarted()
+    {
+        _customEventParams.Clear();
+        _customEventParams.Add("level", 1);
+        _customEventParams.Add("player", "mevlana");
+
+        AnalyticsEvent.LevelComplete("game_restarted", _customEventParams);
+    }
+
 }

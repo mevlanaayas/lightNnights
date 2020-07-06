@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
         light.intensity -= value;
         if (light.intensity <= 0)
         {
-            GameController.Instance.GameOver();
+            GameController.Instance.Lose();
         }
     }
 
